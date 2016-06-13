@@ -22,15 +22,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-$coins_postmeta_keys = array(
-    '_coins-title',
-    '_coins-source',
-    '_coins-date',
-    '_coins-identifier',
-    '_coins-author-first',
-    '_coins-author-last',
-    '_coins-subjects'
-);
+function scholarpress_coins_keys() {
+    return array(
+        '_coins-title',
+        '_coins-source',
+        '_coins-date',
+        '_coins-identifier',
+        '_coins-author-first',
+        '_coins-author-last',
+        '_coins-subjects'
+    );
+}
 
 add_action( 'add_meta_boxes', 'scholarpress_coins_add_coins_meta_box' );
 
@@ -74,7 +76,7 @@ function scholarpress_coins_add_coins_meta_box() {
 }
 
 function scholarpress_coins_show_meta_box( $post, $meta_box_args ) {
-    global $coins_postmeta_keys;
+    $coins_postmeta_keys = scholarpress_coins_keys();
     $default_coins_data = $meta_box_args['args'];
     $coins_display_data = array();
 
@@ -122,7 +124,7 @@ function scholarpress_coins_show_meta_box( $post, $meta_box_args ) {
 add_action( 'save_post', 'scholarpress_coins_save_metadata' );
 
 function scholarpress_coins_save_metadata( $post_id ) {
-    global $coins_postmeta_keys;
+    $coins_postmeta_keys = scholarpress_coins_keys();
     foreach( $_POST as $key => $value ) {
         if ( in_array( $key, $coins_postmeta_keys) ) {
             if ( $_POST[$key] == '' ) {
@@ -142,7 +144,8 @@ add_filter('the_content', 'scholarpress_coins_add_coins_metadata');
 
 function scholarpress_coins_add_coins_metadata($content)
 {
-    global $post, $authordata, $coins_postmeta_keys;
+    global $post, $authordata;
+    $coins_postmeta_keys = scholarpress_coins_keys();
 
     $coins_display_postmeta = array();
     foreach( $coins_postmeta_keys as $key ) {
