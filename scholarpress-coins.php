@@ -125,16 +125,16 @@ add_action( 'save_post', 'scholarpress_coins_save_metadata' );
 
 function scholarpress_coins_save_metadata( $post_id ) {
     $coins_postmeta_keys = scholarpress_coins_keys();
-    foreach( $_POST as $key => $value ) {
-        if ( in_array( $key, $coins_postmeta_keys) ) {
+    foreach( $coins_postmeta_keys as $key ) {
+        if ( array_key_exists( $key, $_POST) ) {
             if ( $_POST[$key] == '' ) {
-                update_post_meta( $post_id, $key, 'scholarpress_coins_empty' );
+                update_post_meta( $post_id, wp_unslash( $key ), 'scholarpress_coins_empty' );
             } elseif ( $key == '_coins-subjects' ) {
                 $coins_subjects_string = str_replace( ', ', ',', $value );
                 $coins_subjects_array = explode( ',', $coins_subjects_string );
                 update_post_meta( $post_id, '_coins-subjects', $coins_subjects_array );
             } else {
-                update_post_meta( $post_id, $key, $_POST[$key] );
+                update_post_meta( $post_id, $key, wp_unslash( $_POST[$key] ) );
             }
         }
     }
