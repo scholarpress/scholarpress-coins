@@ -40,19 +40,38 @@ function scholarpress_coins_show_meta_box( $post ) {
         return;
     }
 
+    ?>
 
-    echo '<label for="coins-title">Title: </label><input class="widefat" id="coins-title" name="_coins-title" type="text" value="' . $metabox_display_data['_coins-title'] . '">';
-    echo '<label for="coins-source">Source: </label><input class="widefat" id="coins-source" name="_coins-source" type="text" value="' . $metabox_display_data['_coins-source'] . '">';
-    echo '<label for="coins-date">Date: </label><input class="widefat" id="coins-date" name="_coins-date" type="text" value="' . $metabox_display_data['_coins-date'] . '">';
-    echo '<label for="coins-identifier">Identifier: </label><input class="widefat" id="coins-identifier" name="_coins-identifier" type="text" value="' . $metabox_display_data['_coins-identifier'] . '">';
-    echo '<label for="coins-author-first">Author/Creator\'s first or given name: </label><input class="widefat" id="coins-author-first" name="_coins-author-first" type="text" value="' . $metabox_display_data['_coins-author-first'] . '">';
-    echo '<label for="coins-author-first">Author/Creator\'s last or family name (if applicable): </label><input class="widefat" id="coins-author-last" name="_coins-author-last" type="text" value="' . $metabox_display_data['_coins-author-last'] . '">';
+    <label for="coins-title"><?php esc_html_e( 'Title:', 'scholarpress-coins' ); ?></label>
+    <input class="widefat" id="coins-title" name="_coins-title" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-title'] ) ?>">
+
+    <label for="coins-source"><?php esc_html_e( 'Source:', 'scholarpress-coins' ); ?></label>
+    <input class="widefat" id="coins-source" name="_coins-source" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-source'] ) ?>">
+
+    <label for="coins-date"><?php esc_html_e( 'Date:', 'scholarpress-coins' ); ?></label>
+    <input class="widefat" id="coins-date" name="_coins-date" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-date'] ) ?>">
+
+    <label for="coins-identifier"><?php esc_html_e( 'Identifier:', 'scholarpress-coins' ); ?></label>
+    <input class="widefat" id="coins-identifier" name="_coins-identifier" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-identifier'] ) ?>">
+
+    <label for="coins-author-first"><?php esc_html_e( 'Author/Creator\'s first or given name:', 'scholarpress-coins' ); ?></label>
+    <input class="widefat" id="coins-author-first" name="_coins-author-first" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-author-first'] ) ?>">
+
+    <label for="coins-author-last"><?php esc_html_e( 'Author/Creator\'s last or family name:', 'scholarpress-coins' ); ?></label>
+    <input class="widefat" id="coins-author-last" name="_coins-author-last" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-author-last'] ) ?>">
+
+    <?php
     if ( ! empty( $metabox_display_data['_coins-subjects'] ) && is_array( $metabox_display_data['_coins-subjects'] ) ) {
         $metabox_display_data['_coins-subjects'] = implode( ', ', $metabox_display_data['_coins-subjects'] );
     } else {
         $metabox_display_data['_coins-subjects'] = '';
     }
-    echo '<label for="coins-subjects">Comma-sparated list of subjects: </label><input class="widefat" id="coins-subjects" name="_coins-subjects" type="text" value="' . $metabox_display_data['_coins-subjects'] . '">';
+    ?>
+
+    <label for="coins-subjects"><?php esc_html_e( 'Comma-separated list of subjects', 'scholarpress-coins' ); ?></label>
+    <input class="widefat" id="coins-subjects" name="_coins-subjects" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-subjects'] ) ?>">
+
+    <?php
 }
 
 add_action( 'save_post', 'scholarpress_coins_save_metadata' );
