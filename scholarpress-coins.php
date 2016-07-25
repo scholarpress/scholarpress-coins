@@ -51,7 +51,7 @@ function scholarpress_coins_show_meta_box( $post ) {
         $metabox_display_data['_coins-subjects'] = implode( ', ', $metabox_display_data['_coins-subjects'] );
     } else {
         $metabox_display_data['_coins-subjects'] = '';
-    }   
+    }
     echo '<label for="coins-subjects">Comma-sparated list of subjects: </label><input class="widefat" id="coins-subjects" name="_coins-subjects" type="text" value="' . $metabox_display_data['_coins-subjects'] . '">';
 }
 
