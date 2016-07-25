@@ -101,11 +101,11 @@ function scholarpress_coins_get_span_title( $data ) {
                 . '&amp;rft.format=text';
     if ( ! empty( $data['_coins-title'] ) )
         $coinsTitle .= '&amp;rft.title='. urlencode( $data['_coins-title'] );
-    if ( ! empty( $display_data['_coins-source'] ) )
+    if ( ! empty( $data['_coins-source'] ) )
         $coinsTitle .= '&amp;rft.source='. urlencode( $data['_coins-source'] );
-    if ( ! empty( $display_data['_coins-date'] ) )
+    if ( ! empty( $data['_coins-date'] ) )
         $coinsTitle .= '&amp;rft.date='. $data['_coins-date'];
-    if ( ! empty( $display_data['_coins-identifier'] ) )
+    if ( ! empty( $data['_coins-identifier'] ) )
         $coinsTitle .= '&amp;rft.identifier='. urlencode( $data['_coins-identifier'] );
     $coinsTitle .= '&amp;rft.language=English';
 
