@@ -106,7 +106,7 @@ function scholarpress_coins_add_coins_to_content( $content ) {
         return $content;
     }
     $coinsTitle = apply_filters('scholarpress_coins_span_title', scholarpress_coins_get_span_title( $display_data ) );
-    $content = '<span class="Z3988" title="'.$coinsTitle.'"></span>' . $content;
+    $content = '<span class="Z3988" title="' . esc_html( $coinsTitle ) . '"></span>' . $content;
     return $content;
 }
 function scholarpress_coins_get_span_title( $data ) {
