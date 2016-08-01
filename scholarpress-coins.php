@@ -35,18 +35,47 @@ function scholarpress_coins_add_coins_meta_box() {
 }
 function scholarpress_coins_show_meta_box( $post ) {
     $metabox_display_data = scholarpress_coins_prepare_data_for_display( $post->ID );
+    $locked_fields = scholarpress_coins_get_locked_fields();
     if ( empty( $metabox_display_data ) || ! is_array( $metabox_display_data ) ) {
         echo 'Sorry, something went wrong with the ScholarPress COinS plugin!';
         return;
     }
 
+    // Post Title field
+    echo '<label for="coins-title">Title: </label><input class="widefat" id="coins-title" name="_coins-title" type="text" value="' . $metabox_display_data['_coins-title'] . '"'; 
+    if ( in_array( '_coins-title', $locked_fields ) ) {
+        echo ' disabled';
+    }
+    echo '>';
+    echo '<input id="coins-title-lock" name="_coins-title-lock" type="checkbox"';
+    if ( in_array( '_coins-title', $locked_fields ) ) {
+        echo ' checked';
+    }
+    echo '>';
+    echo '<label for="coins-title-lock">Lock field to post title?</label></br></br>';
 
-    echo '<label for="coins-title">Title: </label><input class="widefat" id="coins-title" name="_coins-title" type="text" value="' . $metabox_display_data['_coins-title'] . '">';
+    // Author Name fields
+    echo '<label for="coins-author-first">Author/Creator\'s first or given name: </label><input class="widefat" id="coins-author-first" name="_coins-author-first" type="text" value="' . $metabox_display_data['_coins-author-first'] . '"';
+    if ( in_array( '_coins-author-first', $locked_fields ) ) {
+        echo ' disabled';
+    }
+    echo '>';
+    echo '<label for="coins-author-last">Author/Creator\'s last or family name (if applicable): </label><input class="widefat" id="coins-author-last" name="_coins-author-last" type="text" value="' . $metabox_display_data['_coins-author-last'] . '"';
+    if ( in_array( '_coins-author-first', $locked_fields ) ) {
+        echo ' disabled';
+    }
+    echo '>';
+    echo '<input id="coins-author-first-lock" name="_coins-author-first-lock" type="checkbox"';
+    if ( in_array( '_coins-author-first', $locked_fields ) ) {
+        echo ' checked';
+    }
+    echo '>';
+    echo '<label for="coins-author-lock">Lock field to post author?</label></br></br>';
+
     echo '<label for="coins-source">Source: </label><input class="widefat" id="coins-source" name="_coins-source" type="text" value="' . $metabox_display_data['_coins-source'] . '">';
     echo '<label for="coins-date">Date: </label><input class="widefat" id="coins-date" name="_coins-date" type="text" value="' . $metabox_display_data['_coins-date'] . '">';
     echo '<label for="coins-identifier">Identifier: </label><input class="widefat" id="coins-identifier" name="_coins-identifier" type="text" value="' . $metabox_display_data['_coins-identifier'] . '">';
-    echo '<label for="coins-author-first">Author/Creator\'s first or given name: </label><input class="widefat" id="coins-author-first" name="_coins-author-first" type="text" value="' . $metabox_display_data['_coins-author-first'] . '">';
-    echo '<label for="coins-author-first">Author/Creator\'s last or family name (if applicable): </label><input class="widefat" id="coins-author-last" name="_coins-author-last" type="text" value="' . $metabox_display_data['_coins-author-last'] . '">';
+
     if ( ! empty( $metabox_display_data['_coins-subjects'] ) && is_array( $metabox_display_data['_coins-subjects'] ) ) {
         $metabox_display_data['_coins-subjects'] = implode( ', ', $metabox_display_data['_coins-subjects'] );
     } else {
@@ -60,8 +89,26 @@ function scholarpress_coins_save_metadata( $post_id ) {
     $legacy_data = scholarpress_coins_get_legacy_post_data( $post_id );
     foreach( scholarpress_coins_keys() as $key ) {
         $currently_saved_value = get_post_meta( $post_id, $key );
-        if ( array_key_exists( $key, $_POST) ) {
-            if ( $_POST[$key] == '' ) {
+        if ( array_key_exists( $key, $_POST ) ) {
+            if ( array_key_exists( $key . '-lock', $_POST ) && 'on' === $_POST[$key . '-lock'] ) {
+                update_post_meta( $post_id, $key . '-lock', true );
+                if ( $key == '_coins-title' ) {
+                    update_post_meta( $post_id, $key, $_POST['post_title'] );
+                }
+                elseif ( $key == '_coins-author-first' ) {
+                    $author = get_userdata( $_POST['post_author'] );
+                    $authorLast = $author->last_name;
+                    $authorFirst = $author->first_name;
+                    if ( ! empty( $authorLast ) &&  ! empty( $authorFirst ) ) {
+                        update_post_meta( $post_id, '_coins-author-first', $authorFirst );
+                        update_post_meta( $post_id, '_coins-author-last', $authorLast );
+                    } else {
+                        update_post_meta( $post_id, '_coins-author-first', $author->display_name );
+                        update_post_meta( $post_id, '_coins-author-last', 'scholarpress_coins_empty' );
+                        unset( $_POST['_coins-author-last'] );
+                    }
+                }
+            } elseif ( $_POST[$key] == '' ) {
                 if( empty( $currently_saved_value ) && ! empty( $legacy_data[$key] ) && $legacy_data[$key] != 'scholarpress_coins_empty' ) {
                     $new_value = $legacy_data[$key];
                 } else {
@@ -158,7 +205,6 @@ function scholarpress_coins_prepare_data_for_display( $post_id ) {
             }
         }
     }
-
     return $return_data;
 }
 function scholarpress_coins_get_legacy_post_data( $post_id = null ) {
@@ -199,4 +245,25 @@ function scholarpress_coins_get_legacy_post_data( $post_id = null ) {
     return $legacy_coins_data;
 }
 
+function scholarpress_coins_get_locked_fields( $post_id = null ) {
+    global $post;
+    if ( ! $post ) {
+        $post = get_post( $post_id );
+        if ( empty( $post ) ) {
+            return false;
+        }
+    }
+    $locked_fields = array();
+    foreach( scholarpress_coins_keys() as $key ) {
+        if ( get_post_meta( $post->ID, $key . '-lock', true ) ) {
+            $locked_fields[] = $key;
+        }
+    }
+    return $locked_fields;
+}
+
+function scholarpress_coins_enqueue_scripts() {
+    wp_enqueue_script( 'scholarpress-coins', plugins_url( '/js/scholarpress-coins.js', __FILE__ ), array(), '2.0', true );
+}
+add_action( 'admin_enqueue_scripts', 'scholarpress_coins_enqueue_scripts' );
 ?>
