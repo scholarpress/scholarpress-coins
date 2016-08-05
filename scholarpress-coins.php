@@ -100,7 +100,18 @@ function scholarpress_coins_show_meta_box( $post ) {
     // Other fields
     echo '<label for="coins-source">' . __( 'Source (Website/Publication Title):', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-source" name="_coins-source" type="text" value="' . esc_attr( $metabox_display_data['_coins-source'] ) . '"><br><br>';
     echo '<label for="coins-date">' . __( 'Date:', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-date" name="_coins-date" type="text" value="' . esc_attr( $metabox_display_data['_coins-date'] ) . '"><br><br>';
-    echo '<label for="coins-identifier">' . __( 'Identifier: (URL)', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-identifier" name="_coins-identifier" type="text" value="' . esc_attr( $metabox_display_data['_coins-identifier'] ) . '">';
+    echo '<label for="coins-identifier">' . __( 'Identifier: (URL)', 'scholarpress-coins' ) . ' </label>';
+    echo '<input class="widefat" id="coins-identifier" name="_coins-date" type="text" value="' . esc_attr( $metabox_display_data['_coins-identifier'] ) . '"';
+    if ( in_array( '_coins-identifier', $locked_fields ) ) {
+        echo ' disabled';
+    }
+    echo '>';
+    echo '<input id="coins-identifier-lock" name="_coins-identifier-lock" type="checkbox"';
+    if ( in_array( '_coins-identifier', $locked_fields ) ) {
+        echo ' checked';
+    }
+    echo '>';
+    echo '<label for="coins-identifier-lock">' . __( 'Lock field to post URL?', 'scholarpress-coins' ) . '</label><br><br>';
 }
 
 add_action( 'save_post', 'scholarpress_coins_save_metadata' );
@@ -110,7 +121,7 @@ function scholarpress_coins_save_metadata( $post_id ) {
         if ( array_key_exists( $key . '-lock', $_POST ) && 'on' === $_POST[$key . '-lock'] ) {
             update_post_meta( $post_id, $key . '-lock', true );
             if ( $key == '_coins-title' ) {
-                update_post_meta( $post_id, $key, $_POST['post_title'] );
+                update_post_meta( $post_id, '_coins-title', $_POST['post_title'] );
             }
             elseif ( $key == '_coins-author-first' ) {
                 $author = get_userdata( $_POST['post_author'] );
@@ -134,7 +145,9 @@ function scholarpress_coins_save_metadata( $post_id ) {
                     }
                 }
                 update_post_meta( $post_id, '_coins-subjects', $cat_names );
-            }  
+            } elseif ( $key == '_coins-identifier' ) {
+                update_post_meta( $post_id, '_coins-identifier', get_permalink( $post_id ) );
+            }
         } elseif ( array_key_exists( $key, $_POST ) ) {
             update_post_meta( $post_id, $key . '-lock', false );
             // If the user submitted an empty value from the metabox
