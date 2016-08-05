@@ -47,11 +47,10 @@ function scholarpress_coins_show_meta_box( $post ) {
     }
 
     // Post Title field
-    echo '<label for="coins-title"><?php esc_html_e( 'Title:', 'scholarpress-coins' ); ?></label>
-    <input class="widefat" id="coins-title" name="_coins-title" type="text" value="<?php echo_esc_attr( $metabox_display_data['_coins-title'] ); ?>" 
-    <?php
+    echo '<label for="coins-title">' . __( 'Title:', 'scholarpress-coins' ) . '</label>';
+    echo '<input class="widefat" id="coins-title" name="_coins-title" type="text" value="' . esc_attr( $metabox_display_data['_coins-title'] ) . '"'; 
     if ( in_array( '_coins-title', $locked_fields ) ) {
-	echo ' disabled';
+        echo ' disabled';
     }
     echo '>';
     echo '<input id="coins-title-lock" name="_coins-title-lock" type="checkbox"';
@@ -59,15 +58,15 @@ function scholarpress_coins_show_meta_box( $post ) {
         echo ' checked';
     }
     echo '>';
-    echo '<label for="coins-title-lock">Lock field to post title?</label></br></br>';
+    echo '<label for="coins-title-lock">' . __( 'Lock field to post title?', 'scholarpress-coins' ) . '</label></br></br>';
 
     // Author Name fields
-    echo '<label for="coins-author-first">Author/Creator\'s first or given name: </label><input class="widefat" id="coins-author-first" name="_coins-author-first" type="text" value="' . esc_attr( $metabox_display_data['_coins-author-first'] ) . '"';
+    echo '<label for="coins-author-first">' . __( 'Author/Creator\'s first or given name:', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-author-first" name="_coins-author-first" type="text" value="' . esc_attr( $metabox_display_data['_coins-author-first'] ) . '"';
     if ( in_array( '_coins-author-first', $locked_fields ) ) {
         echo ' disabled';
     }
     echo '>';
-    echo '<label for="coins-author-last">Author/Creator\'s last or family name (if applicable): </label><input class="widefat" id="coins-author-last" name="_coins-author-last" type="text" value="' . esc_attr( $metabox_display_data['_coins-author-last'] ) . '"';
+    echo '<label for="coins-author-last">' . __( 'Author/Creator\'s last or family name (if applicable):', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-author-last" name="_coins-author-last" type="text" value="' . esc_attr( $metabox_display_data['_coins-author-last'] ) . '"';
     if ( in_array( '_coins-author-first', $locked_fields ) ) {
         echo ' disabled';
     }
@@ -77,11 +76,11 @@ function scholarpress_coins_show_meta_box( $post ) {
         echo ' checked';
     }
     echo '>';
-    echo '<label for="coins-author-first-lock">Lock fields to post author?</label></br></br>';
+    echo '<label for="coins-author-first-lock">' . __( 'Lock fields to post author?', 'scholarpress-coins' ) . '</label></br></br>';
 
-    echo '<label for="coins-source">Source: </label><input class="widefat" id="coins-source" name="_coins-source" type="text" value="' . esc_attr( $metabox_display_data['_coins-source'] ) . '">';
-    echo '<label for="coins-date">Date: </label><input class="widefat" id="coins-date" name="_coins-date" type="text" value="' . esc_attr( $metabox_display_data['_coins-date'] ) . '">';
-    echo '<label for="coins-identifier">Identifier: </label><input class="widefat" id="coins-identifier" name="_coins-identifier" type="text" value="' . esc_attr( $metabox_display_data['_coins-identifier'] ) . '">';
+    echo '<label for="coins-source">' . __( 'Source:', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-source" name="_coins-source" type="text" value="' . esc_attr( $metabox_display_data['_coins-source'] ) . '">';
+    echo '<label for="coins-date">' . __( 'Date:', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-date" name="_coins-date" type="text" value="' . esc_attr( $metabox_display_data['_coins-date'] ) . '">';
+    echo '<label for="coins-identifier">' . __( 'Identifier:', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-identifier" name="_coins-identifier" type="text" value="' . esc_attr( $metabox_display_data['_coins-identifier'] ) . '">';
 
     // Subjects field
     if ( ! empty( $metabox_display_data['_coins-subjects'] ) && is_array( $metabox_display_data['_coins-subjects'] ) ) {
@@ -89,8 +88,8 @@ function scholarpress_coins_show_meta_box( $post ) {
     } else {
         $metabox_display_data['_coins-subjects'] = '';
     }
-    echo '<label for="coins-subjects">Comma-sparated list of subjects: </label>
-    <input class="widefat" id="coins-subjects" name="_coins-subjects" type="text" value="' . esc_attr( $metabox_display_data['_coins-subjects'] ) . '"';
+    echo '<label for="coins-subjects">' . __( 'Comma-sparated list of subjects:', 'scholarpress-coins' ) . ' </label>';
+    echo '<input class="widefat" id="coins-subjects" name="_coins-subjects" type="text" value="' . esc_attr( $metabox_display_data['_coins-subjects'] ) . '"';
     if ( in_array( '_coins-subjects', $locked_fields ) ) {
         echo ' disabled';
     }
@@ -100,8 +99,7 @@ function scholarpress_coins_show_meta_box( $post ) {
         echo ' checked';
     }
     echo '>';
-    echo '<label for="coins-subjects-lock">Lock field to post categories?</label></br></br>';
-
+    echo '<label for="coins-subjects-lock">' . __( 'Lock field to post categories?', 'scholarpress-coins' ) . '</label></br></br>';
 }
 
 add_action( 'save_post', 'scholarpress_coins_save_metadata' );
