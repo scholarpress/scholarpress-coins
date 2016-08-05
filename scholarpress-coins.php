@@ -22,6 +22,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+add_action( 'init', 'scholarpress_coins_init' );
+function scholarpress_coins_init() {
+    include_once( 'functions.php' );
+}
+
 add_action( 'add_meta_boxes', 'scholarpress_coins_add_coins_meta_box' );
 function scholarpress_coins_add_coins_meta_box() {
     add_meta_box(
@@ -35,52 +40,106 @@ function scholarpress_coins_add_coins_meta_box() {
 }
 function scholarpress_coins_show_meta_box( $post ) {
     $metabox_display_data = scholarpress_coins_prepare_data_for_display( $post->ID );
+    $locked_fields = scholarpress_coins_get_locked_fields();
     if ( empty( $metabox_display_data ) || ! is_array( $metabox_display_data ) ) {
-        echo 'Sorry, something went wrong with the ScholarPress COinS plugin!';
+        echo __( 'Sorry, something went wrong with the ScholarPress COinS plugin!', 'scholarpress-coins' );
         return;
     }
 
-    ?>
-
-    <label for="coins-title"><?php esc_html_e( 'Title:', 'scholarpress-coins' ); ?></label>
-    <input class="widefat" id="coins-title" name="_coins-title" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-title'] ) ?>">
-
-    <label for="coins-source"><?php esc_html_e( 'Source:', 'scholarpress-coins' ); ?></label>
-    <input class="widefat" id="coins-source" name="_coins-source" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-source'] ) ?>">
-
-    <label for="coins-date"><?php esc_html_e( 'Date:', 'scholarpress-coins' ); ?></label>
-    <input class="widefat" id="coins-date" name="_coins-date" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-date'] ) ?>">
-
-    <label for="coins-identifier"><?php esc_html_e( 'Identifier:', 'scholarpress-coins' ); ?></label>
-    <input class="widefat" id="coins-identifier" name="_coins-identifier" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-identifier'] ) ?>">
-
-    <label for="coins-author-first"><?php esc_html_e( 'Author/Creator\'s first or given name:', 'scholarpress-coins' ); ?></label>
-    <input class="widefat" id="coins-author-first" name="_coins-author-first" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-author-first'] ) ?>">
-
-    <label for="coins-author-last"><?php esc_html_e( 'Author/Creator\'s last or family name:', 'scholarpress-coins' ); ?></label>
-    <input class="widefat" id="coins-author-last" name="_coins-author-last" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-author-last'] ) ?>">
-
+    // Post Title field
+    echo '<label for="coins-title"><?php esc_html_e( 'Title:', 'scholarpress-coins' ); ?></label>
+    <input class="widefat" id="coins-title" name="_coins-title" type="text" value="<?php echo_esc_attr( $metabox_display_data['_coins-title'] ); ?>" 
     <?php
+    if ( in_array( '_coins-title', $locked_fields ) ) {
+	echo ' disabled';
+    }
+    echo '>';
+    echo '<input id="coins-title-lock" name="_coins-title-lock" type="checkbox"';
+    if ( in_array( '_coins-title', $locked_fields ) ) {
+        echo ' checked';
+    }
+    echo '>';
+    echo '<label for="coins-title-lock">Lock field to post title?</label></br></br>';
+
+    // Author Name fields
+    echo '<label for="coins-author-first">Author/Creator\'s first or given name: </label><input class="widefat" id="coins-author-first" name="_coins-author-first" type="text" value="' . esc_attr( $metabox_display_data['_coins-author-first'] ) . '"';
+    if ( in_array( '_coins-author-first', $locked_fields ) ) {
+        echo ' disabled';
+    }
+    echo '>';
+    echo '<label for="coins-author-last">Author/Creator\'s last or family name (if applicable): </label><input class="widefat" id="coins-author-last" name="_coins-author-last" type="text" value="' . esc_attr( $metabox_display_data['_coins-author-last'] ) . '"';
+    if ( in_array( '_coins-author-first', $locked_fields ) ) {
+        echo ' disabled';
+    }
+    echo '>';
+    echo '<input id="coins-author-first-lock" name="_coins-author-first-lock" type="checkbox"';
+    if ( in_array( '_coins-author-first', $locked_fields ) ) {
+        echo ' checked';
+    }
+    echo '>';
+    echo '<label for="coins-author-first-lock">Lock fields to post author?</label></br></br>';
+
+    echo '<label for="coins-source">Source: </label><input class="widefat" id="coins-source" name="_coins-source" type="text" value="' . esc_attr( $metabox_display_data['_coins-source'] ) . '">';
+    echo '<label for="coins-date">Date: </label><input class="widefat" id="coins-date" name="_coins-date" type="text" value="' . esc_attr( $metabox_display_data['_coins-date'] ) . '">';
+    echo '<label for="coins-identifier">Identifier: </label><input class="widefat" id="coins-identifier" name="_coins-identifier" type="text" value="' . esc_attr( $metabox_display_data['_coins-identifier'] ) . '">';
+
+    // Subjects field
     if ( ! empty( $metabox_display_data['_coins-subjects'] ) && is_array( $metabox_display_data['_coins-subjects'] ) ) {
         $metabox_display_data['_coins-subjects'] = implode( ', ', $metabox_display_data['_coins-subjects'] );
     } else {
         $metabox_display_data['_coins-subjects'] = '';
     }
-    ?>
+    echo '<label for="coins-subjects">Comma-sparated list of subjects: </label>
+    <input class="widefat" id="coins-subjects" name="_coins-subjects" type="text" value="' . esc_attr( $metabox_display_data['_coins-subjects'] ) . '"';
+    if ( in_array( '_coins-subjects', $locked_fields ) ) {
+        echo ' disabled';
+    }
+    echo '>';
+    echo '<input id="coins-subjects-lock" name="_coins-subjects-lock" type="checkbox"';
+    if ( in_array( '_coins-subjects', $locked_fields ) ) {
+        echo ' checked';
+    }
+    echo '>';
+    echo '<label for="coins-subjects-lock">Lock field to post categories?</label></br></br>';
 
-    <label for="coins-subjects"><?php esc_html_e( 'Comma-separated list of subjects', 'scholarpress-coins' ); ?></label>
-    <input class="widefat" id="coins-subjects" name="_coins-subjects" type="text" value="<?php echo esc_attr( $metabox_display_data['_coins-subjects'] ) ?>">
-
-    <?php
 }
 
 add_action( 'save_post', 'scholarpress_coins_save_metadata' );
 function scholarpress_coins_save_metadata( $post_id ) {
     $legacy_data = scholarpress_coins_get_legacy_post_data( $post_id );
     foreach( scholarpress_coins_keys() as $key ) {
-        $currently_saved_value = get_post_meta( $post_id, $key );
-        if ( array_key_exists( $key, $_POST) ) {
-            if ( $_POST[$key] == '' ) {
+        if ( array_key_exists( $key . '-lock', $_POST ) && 'on' === $_POST[$key . '-lock'] ) {
+            update_post_meta( $post_id, $key . '-lock', true );
+            if ( $key == '_coins-title' ) {
+                update_post_meta( $post_id, $key, $_POST['post_title'] );
+            }
+            elseif ( $key == '_coins-author-first' ) {
+                $author = get_userdata( $_POST['post_author'] );
+                $authorLast = $author->last_name;
+                $authorFirst = $author->first_name;
+                if ( ! empty( $authorLast ) &&  ! empty( $authorFirst ) ) {
+                    update_post_meta( $post_id, '_coins-author-first', $authorFirst );
+                    update_post_meta( $post_id, '_coins-author-last', $authorLast );
+                } else {
+                    update_post_meta( $post_id, '_coins-author-first', $author->display_name );
+                    update_post_meta( $post_id, '_coins-author-last', 'scholarpress_coins_empty' );
+                    unset( $_POST['_coins-author-last'] );
+                }
+            } elseif ( $key == '_coins-subjects' ) {
+                $cats = $_POST['post_category'];
+                $cat_names = array();
+                foreach( $cats as $index => $cat ) {
+                    $cat_obj = get_category( $cat );
+                    if ( ! is_wp_error( $cat_obj ) ) {
+                        $cat_names[] = $cat_obj->name;
+                    }
+                }
+                update_post_meta( $post_id, '_coins-subjects', $cat_names );
+            }  
+        } elseif ( array_key_exists( $key, $_POST ) ) {
+            if ( array_key_exists( $key . '-lock', $_POST ) && 'on' === $_POST[$key . '-lock'] ) {
+
+            } elseif ( $_POST[$key] == '' ) {
                 if( empty( $currently_saved_value ) && ! empty( $legacy_data[$key] ) && $legacy_data[$key] != 'scholarpress_coins_empty' ) {
                     $new_value = $legacy_data[$key];
                 } else {
@@ -134,88 +193,17 @@ function scholarpress_coins_get_span_title( $data ) {
         }
     }
     if ( ! empty( $data['_coins-author-last'] ) && ! empty( $data['_coins-author-first'] ) ) {
-        $coinsTitle .=  '&amp;rft.aulast='.urlencode( $data['_coins-author-last'] )
-                        . '&amp;rft.aufirst='.urlencode( $data['_coins-author-first'] );
+        $coinsTitle .=  '&amp;rft.aulast=' . urlencode( $data['_coins-author-last'] )
+                        . '&amp;rft.aufirst=' . urlencode( $data['_coins-author-first'] );
     } else {
-        $coinsTitle .= '&amp;rft.au='.urlencode( $data['_coins-author-first'] );
+        $coinsTitle .= '&amp;rft.au=' . urlencode( $data['_coins-author-first'] );
     }
 
     return $coinsTitle;
 }
 
-function scholarpress_coins_keys() {
-    return array(
-        '_coins-title',
-        '_coins-source',
-        '_coins-date',
-        '_coins-identifier',
-        '_coins-author-first',
-        '_coins-author-last',
-        '_coins-subjects'
-    );
+function scholarpress_coins_enqueue_scripts() {
+    wp_enqueue_script( 'scholarpress-coins', plugins_url( '/js/scholarpress-coins.js', __FILE__ ), array(), '2.0', true );
 }
-function scholarpress_coins_prepare_data_for_display( $post_id ) {
-    if( empty( $post_id ) )
-        return false;
-
-    $legacy_data = scholarpress_coins_get_legacy_post_data();
-    $return_data = array();
-
-    foreach( scholarpress_coins_keys() as $key ) {
-        $value_from_db = $return_data[$key] = get_post_meta( $post_id, $key, true );
-        if( empty( $value_from_db ) ) {
-            if ( ! empty( $legacy_data[$key] ) && $legacy_data[$key] != 'scholarpress_coins_empty' ) {
-                $return_data[$key] = $legacy_data[$key];
-            } else {
-                $return_data[$key] = '';
-            }
-        } else {
-            if ( $value_from_db == 'scholarpress_coins_empty' ) {
-                $return_data[$key] = '';
-            } else {
-                $return_data[$key] = $value_from_db;
-            }
-        }
-    }
-
-    return $return_data;
-}
-function scholarpress_coins_get_legacy_post_data( $post_id = null ) {
-    global $post, $authordata;
-    if ( ! $post ) {
-        $post = get_post( $post_id );
-        if ( empty( $post ) ) {
-            return false;
-        }
-    }
-    if ( ! $authordata ) {
-        $authordata = get_userdata( $post->post_author );
-    }
-    $legacy_coins_data = array();
-
-    $authorLast = $authordata->last_name;
-    $authorFirst = $authordata->first_name;
-    if ( ! empty( $authorLast ) &&  ! empty( $authorFirst ) ) {
-        $legacy_coins_data['_coins-author-first'] = $authorFirst;
-        $legacy_coins_data['_coins-author-last'] = $authorLast;
-    } else {
-        $legacy_coins_data['_coins-author-first'] = $authordata->display_name;
-        $legacy_coins_data['_coins-author-last'] = 'scholarpress_coins_empty';
-    }
-
-    $legacy_coins_data['_coins-title'] = $post->post_title;
-    $legacy_coins_data['_coins-source'] = get_bloginfo( 'name' );
-    $legacy_coins_data['_coins-date'] = get_the_time( 'Y-m-d' );
-    $legacy_coins_data['_coins-identifier'] = get_permalink( $post->ID );
-
-    if ( $cats = get_the_category() ) {
-        $legacy_coins_data['_coins-subjects'] = array();
-        foreach( $cats as $cat ) {
-            $legacy_coins_data['_coins-subjects'][] = $cat->cat_name;
-        }
-    }
-
-    return $legacy_coins_data;
-}
-
+add_action( 'admin_enqueue_scripts', 'scholarpress_coins_enqueue_scripts' );
 ?>
