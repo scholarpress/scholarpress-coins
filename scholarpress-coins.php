@@ -58,7 +58,7 @@ function scholarpress_coins_show_meta_box( $post ) {
         echo ' checked';
     }
     echo '>';
-    echo '<label for="coins-title-lock">' . __( 'Lock field to post title?', 'scholarpress-coins' ) . '</label></br></br>';
+    echo '<label for="coins-title-lock">' . __( 'Lock field to post title?', 'scholarpress-coins' ) . '</label><br><br>';
 
     // Author Name fields
     echo '<label for="coins-author-first">' . __( 'Author/Creator\'s first or given name:', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-author-first" name="_coins-author-first" type="text" value="' . esc_attr( $metabox_display_data['_coins-author-first'] ) . '"';
@@ -76,11 +76,7 @@ function scholarpress_coins_show_meta_box( $post ) {
         echo ' checked';
     }
     echo '>';
-    echo '<label for="coins-author-first-lock">' . __( 'Lock fields to post author?', 'scholarpress-coins' ) . '</label></br></br>';
-
-    echo '<label for="coins-source">' . __( 'Source:', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-source" name="_coins-source" type="text" value="' . esc_attr( $metabox_display_data['_coins-source'] ) . '">';
-    echo '<label for="coins-date">' . __( 'Date:', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-date" name="_coins-date" type="text" value="' . esc_attr( $metabox_display_data['_coins-date'] ) . '">';
-    echo '<label for="coins-identifier">' . __( 'Identifier:', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-identifier" name="_coins-identifier" type="text" value="' . esc_attr( $metabox_display_data['_coins-identifier'] ) . '">';
+    echo '<label for="coins-author-first-lock">' . __( 'Lock fields to post author?', 'scholarpress-coins' ) . '</label><br><br>';
 
     // Subjects field
     if ( ! empty( $metabox_display_data['_coins-subjects'] ) && is_array( $metabox_display_data['_coins-subjects'] ) ) {
@@ -99,7 +95,12 @@ function scholarpress_coins_show_meta_box( $post ) {
         echo ' checked';
     }
     echo '>';
-    echo '<label for="coins-subjects-lock">' . __( 'Lock field to post categories?', 'scholarpress-coins' ) . '</label></br></br>';
+    echo '<label for="coins-subjects-lock">' . __( 'Lock field to post categories?', 'scholarpress-coins' ) . '</label><br><br>';
+
+    // Other fields
+    echo '<label for="coins-source">' . __( 'Source (Website/Publication Title):', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-source" name="_coins-source" type="text" value="' . esc_attr( $metabox_display_data['_coins-source'] ) . '"><br><br>';
+    echo '<label for="coins-date">' . __( 'Date:', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-date" name="_coins-date" type="text" value="' . esc_attr( $metabox_display_data['_coins-date'] ) . '"><br><br>';
+    echo '<label for="coins-identifier">' . __( 'Identifier: (URL)', 'scholarpress-coins' ) . ' </label><input class="widefat" id="coins-identifier" name="_coins-identifier" type="text" value="' . esc_attr( $metabox_display_data['_coins-identifier'] ) . '">';
 }
 
 add_action( 'save_post', 'scholarpress_coins_save_metadata' );
@@ -135,15 +136,21 @@ function scholarpress_coins_save_metadata( $post_id ) {
                 update_post_meta( $post_id, '_coins-subjects', $cat_names );
             }  
         } elseif ( array_key_exists( $key, $_POST ) ) {
-            if ( array_key_exists( $key . '-lock', $_POST ) && 'on' === $_POST[$key . '-lock'] ) {
-
-            } elseif ( $_POST[$key] == '' ) {
-                if( empty( $currently_saved_value ) && ! empty( $legacy_data[$key] ) && $legacy_data[$key] != 'scholarpress_coins_empty' ) {
+            update_post_meta( $post_id, $key . '-lock', false );
+            // If the user submitted an empty value from the metabox
+            if ( $_POST[$key] == '' ) {
+                // If nothing's saved in the database already (including our empty value), and there is default/legacy data, and the default/legacy data isn't our empty value
+                // This is to maintain compatibility with older versions, which didn't have the metabox. If a user updates an old post for the first time since the update
+                // without adding information to the metabox, then we'll pull in the default/legacy data for the post and save it anyway.
+                if( empty( get_post_meta( $post_id, $key, $_POST[$key] ) ) && ! empty( $legacy_data[$key] ) && $legacy_data[$key] != 'scholarpress_coins_empty' ) {
+                    // Use the legacy data
                     $new_value = $legacy_data[$key];
                 } else {
+                    // In this case, the user must be intentionally overriding a previously saved value, so we'll save it as our empty value
                     $new_value = 'scholarpress_coins_empty';
                 }
                 update_post_meta( $post_id, $key, $new_value );
+            // Subjects is a special case - we need to modify the data as it's submitted before we save it
             } elseif ( $key == '_coins-subjects' ) {
                 $coins_subjects_string = str_replace( ', ', ',', $_POST['_coins-subjects'] );
                 $coins_subjects_array = explode( ',', $coins_subjects_string );

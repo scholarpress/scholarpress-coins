@@ -12,8 +12,14 @@ jQuery( document ).ready( function() {
 			var field = document.getElementById( field_id );
 			if ( this.checked ) {
 				field.disabled = true;
+				if ( field_id == 'coins-author-first' ) {
+					document.getElementById( 'coins-author-last' ).disabled = true;
+				}
 			} else {
 				field.disabled = false;
+				if ( field_id == 'coins-author-first' ) {
+					document.getElementById( 'coins-author-last' ).disabled = false;
+				}
 			}
 		});
 	});
