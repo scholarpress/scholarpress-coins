@@ -9,8 +9,11 @@ jQuery( document ).ready( function() {
 			var field = document.getElementById( field_id );
 			if ( this.checked ) {
 				field.disabled = true;
+				field.value = document.getElementsByClassName(field_id + '-hidden')[0].value;
 				if ( field_id == 'coins-author-first' ) {
-					document.getElementById( 'coins-author-last' ).disabled = true;
+					var last_name_field = document.getElementById( 'coins-author-last' )
+					last_name_field.disabled = true;
+					last_name_field.value = document.getElementsByClassName( 'coins-author-last-hidden' )[0].value;
 				}
 			} else {
 				field.disabled = false;
