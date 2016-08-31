@@ -59,7 +59,7 @@ function scholarpress_coins_show_meta_box( $post ) {
     }
     echo '>';
     echo '<label for="coins-title-lock">' . __( 'Lock field to post title?', 'scholarpress-coins' ) . '</label><br><br>';
-    echo '<input type="hidden" class="coins-title-hidden" value="' . $post->post_title . '">';
+    echo '<input type="hidden" class="coins-title-hidden" value="' . esc_attr( $post->post_title ) . '">';
 
 
     // Author Name fields
@@ -85,8 +85,8 @@ function scholarpress_coins_show_meta_box( $post ) {
     if ( empty( $authorLast ) || empty( $authorFirst ) ) {
         $authorFirst = $authordata->display_name;
     }
-    echo '<input type="hidden" class="coins-author-first-hidden" value="' . $authorFirst . '">';
-    echo '<input type="hidden" class="coins-author-last-hidden" value="' . $authorLast . '">'; 
+    echo '<input type="hidden" class="coins-author-first-hidden" value="' . esc_attr( $authorFirst ) . '">';
+    echo '<input type="hidden" class="coins-author-last-hidden" value="' . esc_attr( $authorLast ) . '">'; 
 
 
     // Subjects field
@@ -116,7 +116,7 @@ function scholarpress_coins_show_meta_box( $post ) {
         }
         $subjects_string = implode( ', ', $subjects);
     }
-    echo '<input type="hidden" class="coins-subjects-hidden" value="' . $subjects_string . '">';
+    echo '<input type="hidden" class="coins-subjects-hidden" value="' . esc_attr( $subjects_string ) . '">';
 
     // Other fields
     echo '<label for="coins-source">' . __( 'Source (Website/Publication Title):', 'scholarpress-coins' ) . ' </label>';
@@ -139,7 +139,7 @@ function scholarpress_coins_show_meta_box( $post ) {
     echo '>';
     echo '<label for="coins-identifier-lock">' . __( 'Lock field to post URL?', 'scholarpress-coins' ) . '</label><br><br>';
     $identifier = get_permalink( $post->ID );
-    echo '<input type="hidden" class="coins-identifier-hidden" value="' . $identifier . '">';
+    echo '<input type="hidden" class="coins-identifier-hidden" value="' . esc_url( $identifier ) . '">';
 }
 
 add_action( 'save_post', 'scholarpress_coins_save_metadata' );
