@@ -127,7 +127,7 @@ function scholarpress_coins_show_meta_box( $post ) {
     
     // Identiier field
     echo '<label for="coins-identifier">' . __( 'Identifier: (URL)', 'scholarpress-coins' ) . ' </label>';
-    echo '<input class="widefat" id="coins-identifier" name="_coins-date" type="text" value="' . esc_attr( $metabox_display_data['_coins-identifier'] ) . '"';
+    echo '<input class="widefat" id="coins-identifier" name="_coins-identifier" type="text" value="' . esc_attr( $metabox_display_data['_coins-identifier'] ) . '"';
     if ( in_array( '_coins-identifier', $locked_fields ) ) {
         echo ' disabled';
     }
