@@ -6,6 +6,7 @@ Description: Makes your blog posts readable by various COinS interpreters.
 Version: 2.0
 Author: Sean Takats, Jeremy Boggs, Daniel Jones, Boone Gorges
 Author URI: http://chnm.gmu.edu
+Tex Domain: scholarpress-coins
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,13 +26,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 add_action( 'init', 'scholarpress_coins_init' );
 function scholarpress_coins_init() {
     include_once( 'functions.php' );
+    load_plugin_textdomain( 'scholarpress-coins', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 }
 
 add_action( 'add_meta_boxes', 'scholarpress_coins_add_coins_meta_box' );
 function scholarpress_coins_add_coins_meta_box() {
     add_meta_box(
         'scholarpress-coins-meta-box',
-        'Bibliographic Information',
+        __('Bibliographic Information', 'scholarpress-coins'),
         'scholarpress_coins_show_meta_box',
         array( 'post', 'page' ),
         'side',
@@ -42,7 +44,7 @@ function scholarpress_coins_show_meta_box( $post ) {
     $metabox_display_data = scholarpress_coins_prepare_data_for_display( $post->ID );
     $locked_fields = scholarpress_coins_get_locked_fields();
     if ( empty( $metabox_display_data ) || ! is_array( $metabox_display_data ) ) {
-        echo __( 'Sorry, something went wrong with the ScholarPress COinS plugin!', 'scholarpress-coins' );
+        _e( 'Sorry, something went wrong with the ScholarPress COinS plugin!', 'scholarpress-coins' );
         return;
     }
 
@@ -95,7 +97,7 @@ function scholarpress_coins_show_meta_box( $post ) {
     } else {
         $metabox_display_data['_coins-subjects'] = '';
     }
-    echo '<label for="coins-subjects">' . __( 'Comma-sparated list of subjects:', 'scholarpress-coins' ) . ' </label>';
+    echo '<label for="coins-subjects">' . __( 'Comma-separated list of subjects:', 'scholarpress-coins' ) . ' </label>';
     echo '<input class="widefat" id="coins-subjects" name="_coins-subjects" type="text" value="' . esc_attr( $metabox_display_data['_coins-subjects'] ) . '"';
     if ( in_array( '_coins-subjects', $locked_fields ) ) {
         echo ' disabled';
