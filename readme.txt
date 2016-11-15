@@ -4,7 +4,7 @@ Donate link: http://scholarpress.net/coins/
 Tags: metadata, coins, posts
 Requires at least: 2.8
 Tested up to: 4.6.1
-Stable tag: 1.3
+Stable tag: 2.1
 
 ScholarPress Coins adds COinS metadata to your blog posts, which will allow other tools that can read/parse COinS to ingest data about your posts. 
 

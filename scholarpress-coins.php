@@ -3,7 +3,7 @@
 Plugin Name: ScholarPress Coins
 Plugin URI: http://www.scholarpress.net/coins/
 Description: Makes your blog posts readable by various COinS interpreters.
-Version: 2.0
+Version: 2.1
 Author: Sean Takats, Jeremy Boggs, Daniel Jones, Boone Gorges
 Author URI: http://chnm.gmu.edu
 Tex Domain: scholarpress-coins
@@ -41,6 +41,8 @@ function scholarpress_coins_add_coins_meta_box() {
     );
 }
 function scholarpress_coins_show_meta_box( $post ) {
+    wp_enqueue_script( 'scholarpress-coins', plugins_url( '/js/scholarpress-coins.js', __FILE__ ), array(), '2.0', true );
+
     $metabox_display_data = scholarpress_coins_prepare_data_for_display( $post->ID );
     $locked_fields = scholarpress_coins_get_locked_fields();
     if ( empty( $metabox_display_data ) || ! is_array( $metabox_display_data ) ) {
@@ -249,9 +251,4 @@ function scholarpress_coins_get_span_title( $data ) {
 
     return $coinsTitle;
 }
-
-function scholarpress_coins_enqueue_scripts() {
-    wp_enqueue_script( 'scholarpress-coins', plugins_url( '/js/scholarpress-coins.js', __FILE__ ), array(), '2.0', true );
-}
-add_action( 'admin_enqueue_scripts', 'scholarpress_coins_enqueue_scripts' );
 ?>
