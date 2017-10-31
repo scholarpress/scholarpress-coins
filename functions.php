@@ -1,5 +1,10 @@
 <?php
 
+function scholarpress_coins__enqueue_assets() {
+    wp_enqueue_script( 'scholarpress-coins', plugins_url( '/js/scholarpress-coins.js', __FILE__ ), array(), '2.1', true );
+    wp_enqueue_style( 'scholarpress-coins', plugins_url( 'scholarpress-coins.css', __FILE__ ) );
+}
+
 function scholarpress_coins_keys() {
     return array(
         '_coins-title',
@@ -14,7 +19,6 @@ function scholarpress_coins_keys() {
 function scholarpress_coins_prepare_data_for_display( $post_id ) {
     if( empty( $post_id ) )
         return false;
-
     $legacy_data = scholarpress_coins_get_legacy_post_data();
     $return_data = array();
 
@@ -35,6 +39,7 @@ function scholarpress_coins_prepare_data_for_display( $post_id ) {
         }
     }
     return $return_data;
+
 }
 function scholarpress_coins_get_legacy_post_data( $post_id = null ) {
     global $post, $authordata;
