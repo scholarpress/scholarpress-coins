@@ -20,7 +20,7 @@ function scholarpress_coins__author_fields( $data, $locked ) {
 	?>
     <div class="scholarpress-field__input">
 	<fieldset <?php if ( $locked ) echo 'disabled'; ?> id="coins-author">
-		<legend>Authors</legend>
+		<legend><?php esc_html_e( 'Authors', 'scholarpress-coins' ); ?></legend>
 		<?php
 	    foreach ( $authors as $index => $author ) {
 	    	scholarpress_coins__single_author_fieldset( $author, $index );
@@ -28,7 +28,7 @@ function scholarpress_coins__author_fields( $data, $locked ) {
 	    ?>
     </fieldset>
 
-    <button id="coins-add-author" class="add_author_button" <?php if ( $locked ) echo 'disabled'; ?>>Add author</button>
+    <button id="coins-add-author" class="add_author_button" <?php if ( $locked ) echo 'disabled'; ?>><?php esc_html_e( 'Add author', 'scholarpress-coins' ); ?></button>
     </div>
 
     <div class="scholarpress-field__lock">
@@ -39,7 +39,7 @@ function scholarpress_coins__author_fields( $data, $locked ) {
             <?php if ( $locked ) echo ' checked'; ?>
         >
         <label for="coins-author-lock">
-            <?php _e( 'Lock fields to post author?', 'scholarpress-coins' ); ?>
+            <?php esc_html_e( 'Lock fields to post author?', 'scholarpress-coins' ); ?>
         </label>
     </div>
     <?php
@@ -63,7 +63,7 @@ function scholarpress_coins__single_author_fieldset( $author, $field_id_index ) 
 ?>
     <fieldset class="coins_single_author">
     	<label>
-    		<?php _e( 'First name:', 'scholarpress-coins' ); ?>
+			<?php esc_html_e( 'First name:', 'scholarpress-coins' ); ?>
         	<input
         		class="widefat"
         		<?php if ( $field_id_index === 0 ) : ?>
@@ -75,7 +75,7 @@ function scholarpress_coins__single_author_fieldset( $author, $field_id_index ) 
         	>
         </label>
        	<label>
-    		<?php _e( 'Last name:', 'scholarpress-coins' ); ?>
+			<?php esc_html_e( 'Last name:', 'scholarpress-coins' ); ?>
             <input
                 class="widefat"
                 <?php if ( $field_id_index === 0 ) : ?>
