@@ -1,5 +1,5 @@
 === Plugin Name ===
-Contributors: stakats, jeremyboggs, dan-jones, boonebgorges, cuny-academic-commons
+Contributors: stakats, jeremyboggs, dan-jones, boonebgorges, r-a-y, cuny-academic-commons
 Donate link: http://scholarpress.net/coins/
 Tags: metadata, coins, posts
 Requires at least: 2.8
