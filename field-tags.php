@@ -4,7 +4,7 @@ function scholarpress_coins__author_fields( $data, $locked ) {
     $legacy_author = array();
     if ( ! is_array( $data['_coins-author-first'] ) ) {
         $legacy_author['first'] = $data['_coins-author-first'];
-        if ( $data['_coins-author-last'] ) 
+        if ( $data['_coins-author-last'] )
             $legacy_author['last'] = $data['_coins-author-last'];
         array_push($authors, $legacy_author);
     } else {
@@ -47,7 +47,7 @@ function scholarpress_coins__author_fields( $data, $locked ) {
     $default_author_data = get_userdata( $post->post_author );
     $default_author_first = $default_author_data->first_name;
     $default_author_last = $default_author_data->last_name;
-    
+
     if ( ! ($default_author_last && $default_author_first ) ) {
         $default_author_first = $default_author_data->display_name;
         $default_author_last = '';
@@ -123,5 +123,3 @@ function scholarpress_coins__field_lock( $field, $locked, $label_text ) {
     </div>
 <?php
 }
-
-?>
