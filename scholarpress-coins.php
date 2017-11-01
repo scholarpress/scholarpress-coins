@@ -210,7 +210,8 @@ function scholarpress_coins_save_metadata( $post_id ) {
                 // If nothing's saved in the database already (including our empty value), and there is default/legacy data, and the default/legacy data isn't our empty value
                 // This is to maintain compatibility with older versions, which didn't have the metabox. If a user updates an old post for the first time since the update
                 // without adding information to the metabox, then we'll pull in the default/legacy data for the post and save it anyway.
-                if( empty( get_post_meta( $post_id, $key, $_POST[$key] ) ) && ! empty( $legacy_data[$key] ) && $legacy_data[$key] != 'scholarpress_coins_empty' ) {
+                $post_meta_for_key = get_post_meta( $post_id, $key, $_POST[$key] );
+                if( empty( $post_meta_for_key ) && ! empty( $legacy_data[$key] ) && $legacy_data[$key] != 'scholarpress_coins_empty' ) {
                     // Use the legacy data
                     $new_value = $legacy_data[$key];
                 } else {
