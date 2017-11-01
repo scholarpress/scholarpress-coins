@@ -3,7 +3,7 @@
 Plugin Name: ScholarPress Coins
 Plugin URI: http://www.scholarpress.net/coins/
 Description: Makes your blog posts readable by various COinS interpreters.
-Version: 2.1
+Version: 2.2
 Author: Sean Takats, Jeremy Boggs, Daniel Jones, Boone Gorges
 Author URI: http://chnm.gmu.edu
 Tex Domain: scholarpress-coins
@@ -173,7 +173,7 @@ add_action( 'save_post', 'scholarpress_coins_save_metadata' );
 function scholarpress_coins_save_metadata( $post_id ) {
     $legacy_data = scholarpress_coins_get_legacy_post_data( $post_id );
     foreach( scholarpress_coins_keys() as $key ) {
-        if ( $key === '_coins-author-first' && $_POST['_coins-author-lock'] === 'on' ) {
+        if ( $key === '_coins-author-first' && array_key_exists('_coins-author-lock', $_POST) && $_POST['_coins-author-lock'] === 'on' ) {
             $author = get_userdata( $_POST['post_author'] );
             $authorLast = $author->last_name;
             $authorFirst = $author->first_name;
