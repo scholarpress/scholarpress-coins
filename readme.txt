@@ -1,10 +1,10 @@
 === Plugin Name ===
-Contributors: stakats, jeremyboggs, dan-jones, boonebgorges
+Contributors: stakats, jeremyboggs, dan-jones, boonebgorges, cuny-academic-commons
 Donate link: http://scholarpress.net/coins/
 Tags: metadata, coins, posts
 Requires at least: 2.8
-Tested up to: 4.6.1
-Stable tag: 2.1
+Tested up to: 4.8.3
+Stable tag: 2.2
 
 ScholarPress Coins adds COinS metadata to your blog posts, which will allow other tools that can read/parse COinS to ingest data about your posts. 
 
@@ -18,6 +18,11 @@ ScholarPress Coins adds COinS metadata to your blog posts, which will allow othe
 1. The metadata is managed via the "Bibliographic Information" meta box on Post and Page edit screens.
 
 == Changelog ==
+
+= 2.2 =
+* Allows for multiple authors on one post or page
+* Fixed issues with i18n
+* Fixed security issues
 
 = 2.0 =
 * Allows users to customize COinS metadata values for title, author's name, subject, source, date, and identifier.
