@@ -24,6 +24,9 @@ ScholarPress Coins adds COinS metadata to your blog posts, which will allow othe
 * Fixed issues with i18n
 * Fixed security issues
 
+= 2.1 =
+* Fix JS error on non-post/page edit screens
+
 = 2.0 =
 * Allows users to customize COinS metadata values for title, author's name, subject, source, date, and identifier.
 * Users can lock the title, author, subject, and identifier fields to the defaults taken from the information about the post.
