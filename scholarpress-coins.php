@@ -252,18 +252,18 @@ function scholarpress_coins_get_span_title( $data ) {
                 . '&amp;rft.type='
                 . '&amp;rft.format=text';
     if ( ! empty( $data['_coins-title'] ) )
-        $coinsTitle .= '&amp;rft.title='. urlencode( $data['_coins-title'] );
+        $coinsTitle .= '&amp;rft.title='. esc_attr( $data['_coins-title'] );
     if ( ! empty( $data['_coins-source'] ) )
-        $coinsTitle .= '&amp;rft.source='. urlencode( $data['_coins-source'] );
+        $coinsTitle .= '&amp;rft.source='. esc_attr( $data['_coins-source'] );
     if ( ! empty( $data['_coins-date'] ) )
         $coinsTitle .= '&amp;rft.date='. $data['_coins-date'];
     if ( ! empty( $data['_coins-identifier'] ) )
-        $coinsTitle .= '&amp;rft.identifier='. urlencode( $data['_coins-identifier'] );
+        $coinsTitle .= '&amp;rft.identifier='. esc_attr( $data['_coins-identifier'] );
     $coinsTitle .= '&amp;rft.language=English';
 
     if ( ! empty( $data['_coins-subjects'] ) && is_array( $data['_coins-subjects'] ) ) {
         foreach( $data['_coins-subjects'] as $subject ) {
-            $coinsTitle .= '&amp;rft.subject=' . urlencode( $subject );
+            $coinsTitle .= '&amp;rft.subject=' . esc_attr( $subject );
         }
     }
     if ( ! empty( $data['_coins-author-last'] ) ) {
@@ -272,13 +272,13 @@ function scholarpress_coins_get_span_title( $data ) {
             $data['_coins-author-last'] = str_split( $data['_coins-author-last'], strlen( $data['_coins-author-last'] ) + 1 );
         }
         foreach( $data['_coins-author-first'] as $index => $author_first ) {
-            $coinsTitle .=  '&amp;rft.au=' . urlencode( $author_first );
+            $coinsTitle .=  '&amp;rft.au=' . esc_attr( $author_first );
             if ( ! empty($data['_coins-author-last'][$index] ) ) {
-                $coinsTitle .= urlencode( ' ' . $data['_coins-author-last'][$index] );
+                $coinsTitle .= esc_attr( ' ' . $data['_coins-author-last'][$index] );
             } 
         }
     } else {
-        $coinsTitle .= '&amp;rft.au=' . urlencode( $data['_coins-author-first'] );
+        $coinsTitle .= '&amp;rft.au=' . esc_attr( $data['_coins-author-first'] );
     }
 
     return $coinsTitle;
